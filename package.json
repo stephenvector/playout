@@ -1,0 +1,66 @@
+{
+  "name": "playout",
+  "version": "0.0.1",
+  "description": "A graphical UI for editing user-defined dynamic data structures & frontend layouts content.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephenvector/playout.git"
+  },
+  "author": "Stephen Vector",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stephenvector/playout/issues"
+  },
+  "homepage": "https://github.com/stephenvector/playout#readme",
+  "dependencies": {
+    "@emotion/core": "^10.0.17",
+    "@emotion/styled": "^10.0.17",
+    "@panva/jose": "^1.9.2",
+    "@zeit/next-css": "^1.0.1",
+    "bcryptjs": "^2.4.3",
+    "final-form": "^4.18.5",
+    "immer": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.3.2",
+    "next": "^9.0.5",
+    "next-transpile-modules": "^2.3.1",
+    "now": "^16.2.0",
+    "re-resizable": "^6.0.0",
+    "react": "^16.9.0",
+    "react-dnd": "^9.3.4",
+    "react-dom": "^16.9.0",
+    "react-final-form": "^6.3.0",
+    "react-resize-detector": "^4.2.0",
+    "uuid": "^3.3.3",
+    "validator": "^11.1.0",
+    "zxcvbn": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/enzyme": "^3.10.3",
+    "@types/jest": "^24.0.18",
+    "@types/mongodb": "^3.3.1",
+    "@types/node": "^12.7.5",
+    "@types/react": "^16.9.2",
+    "@types/react-resize-detector": "^4.0.2",
+    "@types/react-test-renderer": "^16.9.0",
+    "@types/uuid": "^3.4.5",
+    "@types/validator": "^10.11.3",
+    "@types/zxcvbn": "^4.4.0",
+    "babel-jest": "^24.9.0",
+    "dotenv": "^8.1.0",
+    "dotenv-webpack": "^1.7.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "jest": "^24.9.0",
+    "react-addons-test-utils": "^15.6.2",
+    "react-dnd-html5-backend": "^9.3.4",
+    "react-test-renderer": "^16.9.0",
+    "typescript": "^3.6.3"
+  }
+}
