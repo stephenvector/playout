@@ -1,7 +1,6 @@
 import mongodb from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import Busboy from "busboy";
-import { inspect } from "util";
 
 export default function UploadHandler(
   req: NextApiRequest,
@@ -11,41 +10,43 @@ export default function UploadHandler(
     throw new Error("Invalid method.");
   }
 
+  if (process.env.MONGODB_URI === undefined) {
+    throw new Error("MONGODB_URI env variable missing!");
+  }
+
+  const client = new mongodb.MongoClient(process.env.MONGODB_URI, {
+    useNewUrlParser: true
+  });
+
   var busboy = new Busboy({ headers: req.headers });
-  busboy.on("file", function(fieldname, file, filename, encoding, mimetype) {
-    console.log(
-      "File [" +
-        fieldname +
-        "]: filename: " +
-        filename +
-        ", encoding: " +
-        encoding +
-        ", mimetype: " +
-        mimetype
-    );
-    file.on("data", function(data) {
-      console.log("File [" + fieldname + "] got " + data.length + " bytes");
-    });
-    file.on("end", function() {
-      console.log("File [" + fieldname + "] Finished");
-    });
-  });
-  busboy.on("field", function(
-    fieldname,
-    val,
-    fieldnameTruncated,
-    valTruncated,
-    encoding,
-    mimetype
+  busboy.on("file", function(
+    _fieldname,
+    filestream,
+    filename,
+    _encoding,
+    _mimetype
   ) {
-    console.log("Field [" + fieldname + "]: value: " + inspect(val));
+    client.connect(() => {
+      const db = client.db();
+      const bucket = new mongodb.GridFSBucket(db);
+      const uploadStream = bucket.openUploadStream(filename);
+      const id = uploadStream.id;
+
+      filestream.pipe(uploadStream);
+
+      uploadStream.on("error", () => {
+        return res.status(500).json({ message: "Error uploading file" });
+      });
+
+      uploadStream.on("finish", () => {
+        return res.status(201).json({
+          message:
+            "File uploaded successfully, stored under Mongo ObjectID: " + id
+        });
+      });
+    });
   });
-  busboy.on("finish", function() {
-    console.log("Done parsing form!");
-    // res.writeHead(303, { Connection: "close", Location: "/" });
-    res.status(300);
-  });
-  req.pipe(busboy);
+  return req.pipe(busboy);
 }
 
 export const config = {
