@@ -4,7 +4,9 @@ import uuidv4 from "uuid/v4";
 import axios from "axios";
 import SignUpSignInForm from "../components/SignUpSignInForm";
 import LayoutBuilder from "../components/LayoutBuilder/LayoutBuilder";
-import { Layout } from "../@types";
+import { Layout, SignUpSignInValues } from "../@types";
+import { AUTH_ACTION_SIGN_IN, AUTH_ACTION_SIGN_UP } from "../constants";
+import { useAuth, signUp, signIn } from "../contexts/auth";
 
 const initialValues: { layout: Layout } = {
   layout: {
@@ -14,15 +16,9 @@ const initialValues: { layout: Layout } = {
 };
 
 function Home() {
+  const [authState, authDispatch] = useAuth();
   return (
     <div>
-      <h2>Sign Up</h2>
-      <SignUpSignInForm onSubmit={async () => {}} />
-
-      <h2>Sign In</h2>
-      <SignUpSignInForm onSubmit={async () => {}} />
-
-      {/* <form encType="multipart/form-data"> */}
       <input
         type="file"
         multiple
@@ -54,7 +50,6 @@ function Home() {
           console.log(formData);
         }}
       />
-      {/* </form> */}
 
       <Form onSubmit={() => {}} initialValues={initialValues}>
         {() => (

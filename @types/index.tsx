@@ -1,3 +1,37 @@
+export interface AuthContextState {
+  loggedIn: boolean;
+  token: string | undefined;
+  tokenDecoded: { [key: string]: any } | undefined;
+}
+
+export interface SignOutAuthAction {
+  type: "signOut";
+}
+export interface SignInAuthAction {
+  type: "signIn";
+  token: string;
+}
+
+export type AuthAction = SignOutAuthAction | SignInAuthAction;
+
+export type AuthContextDispatch = (action: AuthAction) => void;
+
+export interface EmotionTheme {
+  colors: {
+    background: string;
+    foreground: string;
+    accent: string;
+  };
+}
+
+export type AuthFormAction = "signin" | "signup";
+
+export type SignUpSignInValues = {
+  email: string;
+  password: string;
+  action: AuthFormAction;
+};
+
 export interface ColumnBlock {
   id: string;
   value: string;

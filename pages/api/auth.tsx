@@ -1,10 +1,16 @@
 import { isEmail } from "validator";
 import zxcvbn from "zxcvbn";
 import { MongoClient, Cursor } from "mongodb";
-import { NextApiRequest } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import { JWK, JWT } from "@panva/jose";
-import { USERS_COLLECTION_NAME } from "../../constants";
+import {
+  USERS_COLLECTION_NAME,
+  AUTH_ACTION_SIGN_IN,
+  AUTH_ACTION_SIGN_UP,
+  AUTH_HASH_ROUNDS,
+  MIN_ZXCVBN_SCORE
+} from "../../constants";
 
 interface User {
   email: string;
@@ -32,7 +38,10 @@ async function getDBConnection(): Promise<MongoClient> {
   return connection;
 }
 
-export default async function AuthEndpoint(req: NextApiRequest) {
+export default async function AuthEndpoint(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== "POST") {
     throw new Error("Invalid request method");
   }
@@ -41,7 +50,15 @@ export default async function AuthEndpoint(req: NextApiRequest) {
     throw new Error("Didn't pass enough information");
   }
 
-  const { email, password } = req.body;
+  const { email, password, action } = req.body;
+
+  if (
+    action === null ||
+    action === undefined ||
+    (action !== AUTH_ACTION_SIGN_UP && action !== AUTH_ACTION_SIGN_IN)
+  ) {
+    throw new Error("Auth action not specified or not valid.");
+  }
 
   if (email === undefined || email === null) {
     throw new Error("No email specified.");
@@ -59,7 +76,7 @@ export default async function AuthEndpoint(req: NextApiRequest) {
 
   const passwordRating = zxcvbn(password);
 
-  if (passwordRating.score < 3) {
+  if (passwordRating.score < MIN_ZXCVBN_SCORE) {
     throw new Error("Invalid password.");
   }
 
@@ -70,22 +87,42 @@ export default async function AuthEndpoint(req: NextApiRequest) {
     .collection(USERS_COLLECTION_NAME)
     .findOne<User>({ email: cleanedUpEmail });
 
-  if (result === null || result === undefined) {
-    throw new Error("Invalid user");
+  if (action === AUTH_ACTION_SIGN_IN) {
+    if (result === null || result === undefined) {
+      throw new Error("Invalid user");
+    }
+
+    const passwordResult = bcrypt.compareSync(password, result.passwordHash);
+
+    if (passwordResult !== true) {
+      throw new Error("Invalid password.");
+    }
+
+    const jwtPayload = {
+      email: result.email,
+      id: result._id
+    };
+
+    const token = JWT.sign(jwtPayload, authJWK);
+
+    res.json({ token });
+  } else if (action === AUTH_ACTION_SIGN_UP) {
+    if (result !== null) {
+      throw new Error("Email is already in use or is invalid.");
+    }
+
+    const passwordHash = bcrypt.hashSync(password, AUTH_HASH_ROUNDS);
+
+    const signUpResult = await dbConnection
+      .db()
+      .collection(USERS_COLLECTION_NAME)
+      .insertOne({
+        email: cleanedUpEmail,
+        passwordHash
+      });
+
+    res.json({ success: true });
+  } else {
+    throw new Error("Sanity check failure.");
   }
-
-  const passwordResult = bcrypt.compareSync(password, result.passwordHash);
-
-  if (passwordResult !== true) {
-    throw new Error("Invalid password.");
-  }
-
-  const jwtPayload = {
-    email: result.email,
-    id: result._id
-  };
-
-  const token = JWT.sign(jwtPayload, authJWK);
-
-  return { token };
 }
