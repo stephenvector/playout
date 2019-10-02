@@ -1,3 +1,19 @@
+import { InferType } from "yup";
+import {
+  contentTypeSchema,
+  contentFieldTypeSchema,
+  contentTypeFieldTypeSchema
+} from "../schema";
+
+export const ContentTypeFieldType =
+  "date" | "time" | "text" | "image" | "layout" | "select" | "relationship";
+
+export type ContentTypeFieldType = InferType<typeof contentTypeFieldTypeSchema>;
+
+export type ContentTypeField = InferType<typeof contentFieldTypeSchema>;
+
+export type ContentType = InferType<typeof contentTypeSchema>;
+
 export interface AuthContextState {
   loggedIn: boolean;
   token: string | undefined;
@@ -15,14 +31,6 @@ export interface SignInAuthAction {
 export type AuthAction = SignOutAuthAction | SignInAuthAction;
 
 export type AuthContextDispatch = (action: AuthAction) => void;
-
-export interface EmotionTheme {
-  colors: {
-    background: string;
-    foreground: string;
-    accent: string;
-  };
-}
 
 export type AuthFormAction = "signin" | "signup";
 

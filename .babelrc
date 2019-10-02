@@ -1,4 +1,3 @@
 {
-  "plugins": ["emotion"],
   "presets": ["next/babel"]
 }
