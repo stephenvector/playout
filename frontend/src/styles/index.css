@@ -1,0 +1,85 @@
+:root {
+  --background: #11111f;
+  --foreground: #e1e1ef;
+  --border-radius-size: 3px;
+  --spacing-medium: 1.6rem;
+  --border-color: #41414f;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 18px;
+  background: var(--background);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+label {
+  display: block;
+}
+
+input[type="text"],
+input:not([type]) {
+  padding: 0.5rem;
+  background: transparent;
+  border-radius: 0;
+  border: 1px solid var(--border-color);
+  display: block;
+  color: inherit;
+  width: 100%;
+  border-radius: var(--border-radius-size);
+}
+
+.container {
+  width: 100%;
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.RenderField {
+  margin-bottom: var(--spacing-medium);
+}
+
+.RepeatableFieldFields {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-size);
+  margin-bottom: var(--spacing-medium);
+}
+
+.RepeatableFieldField {
+  padding: var(--spacing-medium);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.RepeatableFieldFields > .RepeatableFieldField:last-of-type {
+  border-bottom: none;
+}
+
+.RepeatableFieldFields > .RepeatableFieldField > .RenderField:last-of-type {
+  margin-bottom: 0;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  background: var(--foreground);
+  padding: 0.5rem;
+  color: var(--background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-size);
+}
