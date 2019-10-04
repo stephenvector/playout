@@ -1,7 +1,6 @@
 import { isEmail } from "validator";
 import zxcvbn from "zxcvbn";
 import { MongoClient } from "mongodb";
-import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import { JWK, JWT } from "@panva/jose";
 import { Request, Response, NextFunction } from "express";
