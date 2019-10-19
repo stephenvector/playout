@@ -77,35 +77,7 @@ export type ContentTypeField =
 
 export type ContentType = {
   name: string;
-  labels: {
-    slug: string;
-    plural: string;
-    singular: string;
-  };
   fields: ContentTypeField[];
-};
-
-const contentTypeLabelsField: FieldGroupField = {
-  id: "labels",
-  name: "Labels",
-  type: "fieldgroup",
-  children: [
-    {
-      id: "plural",
-      type: "text",
-      name: "Plural"
-    },
-    {
-      id: "singular",
-      type: "text",
-      name: "Singular"
-    },
-    {
-      id: "slug",
-      type: "text",
-      name: "Slug"
-    }
-  ] as ContentTypeField[]
 };
 
 const optionsRepeatableField: RepeatableField = {
@@ -205,20 +177,14 @@ const contentTypeFieldsField: RepeatableField = {
   ]
 };
 
-export const ContentTypeContentType: ContentType = {
+export const contentTypeContentType: ContentType = {
   name: "Content Types",
-  labels: {
-    slug: "content-type",
-    plural: "Content Types",
-    singular: "Content Type"
-  },
   fields: [
     {
       id: "name",
       name: "Name",
       type: "text"
     },
-    contentTypeLabelsField,
     contentTypeFieldsField
   ]
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "react-final-form";
-import { SelectField as SelectFieldType } from "../built-in-content-types";
+import { SelectField as SelectFieldType } from "../config";
 
 type SelectFieldProps = {
   field: SelectFieldType;

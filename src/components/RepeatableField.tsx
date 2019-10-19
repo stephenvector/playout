@@ -1,10 +1,9 @@
 import React from "react";
 import { FieldArray } from "react-final-form-arrays";
 import {
-  ConditionalField as ConditionalFieldType,
   RepeatableField as RepeatableFieldType,
   ContentTypeField
-} from "../built-in-content-types";
+} from "../config";
 
 type RepeatableFieldProps = {
   field: RepeatableFieldType;
@@ -15,7 +14,7 @@ export default function RepeatableField(props: RepeatableFieldProps) {
   const field = props.field as RepeatableFieldType;
   const children = field.children;
   return (
-    <FieldArray name={field.id}>
+    <FieldArray<ContentTypeField, HTMLDivElement> name={field.id}>
       {fieldArrayRenderProps => (
         <div className="RepeatableField">
           <div className="RepeatableFieldFields">
@@ -29,19 +28,23 @@ export default function RepeatableField(props: RepeatableFieldProps) {
                 })}
                 <button
                   className="DeleteButton"
-                  onClick={() => {
+                  onClick={(): void => {
                     fieldArrayRenderProps.fields.remove(fieldIndex);
                   }}
                   type="button"
                 >
-                  Delete
+                  &times;
                 </button>
               </div>
             ))}
           </div>
           <button
-            onClick={() => {
-              fieldArrayRenderProps.fields.push({});
+            onClick={function handleAdd(): void {
+              fieldArrayRenderProps.fields.push({
+                type: "text",
+                id: "",
+                name: ""
+              });
             }}
             type="button"
           >

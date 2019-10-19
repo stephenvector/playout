@@ -3,7 +3,7 @@ import { useForm } from "react-final-form";
 import {
   ContentTypeField,
   ConditionalField as ConditionalFieldType
-} from "../built-in-content-types";
+} from "../config";
 
 type ConditionalFieldProps = {
   field: ConditionalFieldType;

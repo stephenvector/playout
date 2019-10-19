@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { ContentTypeField } from "../@types";
+import { ContentTypeField } from "../types";
 
 export function getRandomID(
   existingIDs: string[] = [],

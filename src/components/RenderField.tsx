@@ -1,15 +1,19 @@
 import React from "react";
 import ConditionalField from "./ConditionalField";
 import FieldGroupField from "./FieldGroupField";
+import InputField from "./InputField";
 import SelectField from "./SelectField";
 import RepeatableField from "./RepeatableField";
+import IdField from "./IdField";
 import {
   ContentTypeField,
+  TextField,
+  IdField as IdFieldType,
   ConditionalField as ConditionalFieldType,
   RepeatableField as RepeatableFieldType,
   FieldGroupField as FieldGroupFieldType,
   SelectField as SelectFieldType
-} from "../built-in-content-types";
+} from "../types";
 
 type RenderFieldProps = {
   field: ContentTypeField;
@@ -44,13 +48,13 @@ export default function RenderField({ field }: RenderFieldProps) {
           renderChildField={renderChildField}
         />
       );
+    } else if (field.type === "text") {
+      return <InputField field={field as TextField} />;
+    } else if (field.type === "id") {
+      return <IdField field={field as IdFieldType} />;
     }
 
-    switch (field.type) {
-      case "text":
-      default:
-        return <input name={id} />;
-    }
+    return null;
   }
 
   let hasLabel = ["conditional"].indexOf(field.type) === -1;

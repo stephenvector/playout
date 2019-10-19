@@ -2,7 +2,7 @@ import React from "react";
 import {
   FieldGroupField as FieldGroupFieldType,
   ContentTypeField
-} from "../built-in-content-types";
+} from "../config";
 
 type FieldGroupFieldProps = {
   field: FieldGroupFieldType;
