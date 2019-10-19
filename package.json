@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "next build && tsc --project tsconfig.server.json",
-    "test": "wdio wdio.conf.js",
+    "test": "jest",
     "lint": "eslint src/**/*.tsx"
   },
   "husky": {
