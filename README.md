@@ -1,9 +1,3 @@
 # playout
 
-A graphical UI for editing user-defined dynamic data structures &amp; frontend layouts content.
-
-Required Environment Variables
-
-```
-MONGODB_URI
-```
+A CMS for building dynamic data structured websites on Firebase.
