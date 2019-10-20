@@ -1,20 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
     "jsx": "react",
-    "types": ["node", "webdriverio", "@wdio/mocha-framework"]
+    "outDir": "lib",
+    "declaration": true,
+    "rootDirs": ["src"],
+    "resolveJsonModule": true,
+    "inlineSourceMap": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node"
   },
-  "exclude": ["node_modules"],
-  "include": ["src/**/*.tsx", "test/specs/**/*.ts"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "src/**/*.test.tsx",
+    "*/__tests__/**/*",
+    "coverage",
+    "node_modules"
+  ]
 }
