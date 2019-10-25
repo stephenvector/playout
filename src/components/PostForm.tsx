@@ -2,7 +2,7 @@ import React from "react";
 import { FormApi, SubmissionErrors } from "final-form";
 import { Form } from "react-final-form";
 import arrayMutators from "final-form-arrays";
-import { ContentType, ContentTypeField } from "../types";
+import { ContentType } from "../types";
 import RenderField from "./RenderField";
 
 type PostFormProps<T> = {
@@ -17,7 +17,7 @@ export default function PostForm<T = {}>({
   onSubmit
 }: PostFormProps<T>) {
   return (
-    <Form<T>
+    <Form
       initialValues={initialValues}
       mutators={{ ...arrayMutators }}
       onSubmit={onSubmit}
@@ -25,8 +25,12 @@ export default function PostForm<T = {}>({
       {({ handleSubmit, form }) => (
         <div className="PostForm">
           <form autoComplete="off" onSubmit={handleSubmit}>
-            {contentType.fields.map((field: ContentTypeField) => (
-              <RenderField field={field} key={field.id} />
+            {Object.keys(contentType.fields).map(fieldId => (
+              <RenderField
+                key={fieldId}
+                field={contentType.fields[fieldId]}
+                id={fieldId}
+              />
             ))}
 
             <p>

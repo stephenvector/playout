@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { useField } from "react-final-form";
-import { ContentTypeField } from "../config";
+import { ContentTypeField } from "../../config";
 
 type IdFieldProps = {
   field: ContentTypeField;

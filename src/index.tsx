@@ -5,8 +5,8 @@ import App from "./components/App";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-
-import "./styles/index.css";
+import { DefaultTheme } from "styled-components";
+import { PrefabThemeProvider, defaultPrefabTheme } from "@stephenvector/prefab";
 
 firebase.initializeApp({
   apiKey: process.env.FIREBASE_API_KEY,
@@ -18,11 +18,17 @@ firebase.initializeApp({
   appId: process.env.FIREBASE_APP_ID
 });
 
+const playoutTheme = defaultPrefabTheme;
+
+playoutTheme.colors.bg = "#f2f2f2";
+
 function Root() {
   return (
-    <Router>
-      <App />
-    </Router>
+    <PrefabThemeProvider includeGlobals theme={playoutTheme}>
+      <Router>
+        <App />
+      </Router>
+    </PrefabThemeProvider>
   );
 }
 

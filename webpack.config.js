@@ -34,7 +34,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: require("html-webpack-template"),
       appMountId: "root",
-      title: "prefab",
+      title: "playout",
       headHtmlSnippet:
         '<meta name="viewport" content="initial-scale=1, maximum-scale=1">'
     })

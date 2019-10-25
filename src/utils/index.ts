@@ -1,5 +1,16 @@
-import * as yup from "yup";
-import { ContentTypeField } from "../types";
+import {
+  ContentTypeFields,
+  ContentType,
+  DateField,
+  TimeField,
+  TextField,
+  RelationshipField,
+  FieldGroupField,
+  CheckboxField,
+  RadioField,
+  ContentTypeField,
+  SelectField
+} from "../types";
 
 export function getRandomID(
   existingIDs: string[] = [],
@@ -27,37 +38,35 @@ export function getRandomID(
   return randomID;
 }
 
-export function getYupSchemaFromContentTypeFields(
-  contentTypeFields: ContentTypeField[]
-): yup.ObjectSchema {
-  const p: {
-    [k: string]:
-      | yup.StringSchema
-      | yup.NumberSchema
-      | yup.MixedSchema
-      | yup.ObjectSchema;
-  } = {};
+export function getValueShapeFromContentTypeFields(fields: ContentTypeFields) {
+  const valueShape: { [key: string]: any } = {};
 
-  contentTypeFields.forEach(field => {
-    switch (field.type) {
-      case "text":
-        p[field.id] = yup
-          .string()
-          .required()
-          .default("");
-      case "time":
+  Object.keys(fields).forEach((fieldId: string) => {
+    const field = fields[fieldId];
+    const { fieldType } = field;
+
+    let defaultValue: any = "";
+    switch (fieldType) {
       case "date":
-        p[field.id] = yup
-          .number()
-          .required()
-          .default(0);
+      case "time":
+        defaultValue = 0;
+        break;
+      case "checkbox":
+      case "select":
+        defaultValue = "";
+        break;
+      case "fieldgroup":
+        defaultValue = {};
+        if ((field as FieldGroupField).children) {
+          defaultValue = getValueShapeFromContentTypeFields(
+            (field as FieldGroupField).children
+          );
+        }
         break;
       default:
         break;
     }
   });
 
-  const contentTypeYupSchema = yup.object().shape(p);
-
-  return contentTypeYupSchema;
+  return valueShape;
 }

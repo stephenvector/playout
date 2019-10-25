@@ -1,166 +1,85 @@
-import { InferType } from "yup";
-import {
-  contentTypeSchema,
-  contentFieldTypeSchema,
-  contentTypeFieldTypeSchema
-} from "../schema";
-
-export type DateField = {
-  id: string;
-  name: string;
-  type: "date";
-};
-
-export type TimeField = {
-  id: string;
-  name: string;
-  type: "time";
-};
-
-export type TextField = {
-  id: string;
-  name: string;
-  type: "text";
-};
-
-export type LayoutField = {
-  id: string;
-  name: string;
-  type: "layout";
-};
-
-export type RelationshipField = {
-  id: string;
-  name: string;
-  type: "relationship";
-  relationshipWith: string;
-};
-
-export type FieldGroupField = {
-  id: string;
-  name: string;
-  type: "fieldgroup";
-  children: ContentTypeField[];
-};
-
-export interface RepeatableField {
-  id: string;
-  name: string;
-  type: "repeatable";
-  children: ContentTypeField[];
-}
-
-export interface SelectField {
-  id: string;
-  name: string;
-  type: "select";
-  options: {
-    label: string;
-    value: string;
-  }[];
-}
-
-export interface CheckboxField {
-  id: string;
-  name: string;
-  type: "checkbox";
-  options: {
-    label: string;
-    value: string;
-  }[];
-}
-
-export interface RadioField {
-  id: string;
-  name: string;
-  type: "radio";
-  options: {
-    label: string;
-    value: string;
-  }[];
-}
-
 export type ConditionType = "equalto" | "notequalto";
 
-export interface ConditionalField {
-  id: string;
+interface FieldWithoutConditions {
   name: string;
-  type: "conditional";
-  children: ContentTypeField[];
+  repeatable?: boolean;
+}
+
+interface FieldWithConditions {
+  name: string;
+  repeatable?: boolean;
   comparisonType: ConditionType;
   comparisonTargetField: string;
   comparisonTargetValue: (string | number)[];
 }
 
-export interface IdField {
-  id: string;
-  name: string;
-  type: "id";
-}
+type FieldBase = FieldWithoutConditions | FieldWithConditions;
+
+type FieldBaseWithOptions = FieldBase & {
+  options: {
+    label: string;
+    value: string;
+  }[];
+};
+
+type FieldWithChildren = FieldBase & {
+  children: ContentTypeFields
+};
+
+export type CheckboxField = FieldBaseWithOptions & {
+  fieldType: "checkbox";
+};
+
+export type DateField = FieldBase & { fieldType: "date" };
+
+export type FieldGroupField = FieldWithChildren & {
+  fieldType: "fieldgroup";
+};
+
+export type RadioField = FieldBaseWithOptions & {
+  fieldType: "radio";
+};
+
+export type RelationshipField = FieldBase & {
+  fieldType: "relationship";
+  relationshipWith: string;
+};
+
+export type SelectField = FieldBaseWithOptions & {
+  fieldType: "select";
+};
+
+export type TextField = FieldBase & { fieldType: "text" };
+
+export type TextareaField = FieldBase & { fieldType: "textarea" };
+
+export type TimeField = FieldBase & { fieldType: "time" };
 
 export type ContentTypeField =
+  | CheckboxField
   | DateField
+  | FieldGroupField
+  | RadioField
+  | RelationshipField
+  | SelectField
   | TimeField
   | TextField
-  | LayoutField
-  | RepeatableField
-  | RelationshipField
-  | FieldGroupField
-  | CheckboxField
-  | RadioField
-  | ConditionalField
-  | ContentTypeField
-  | SelectField
-  | IdField;
+  | TextareaField;
+
+type ContentTypeFields = {
+  [id: string]: ContentTypeField;
+};
 
 export type ContentType = {
   name: string;
-  fields: ContentTypeFields[];
+  fields: ContentTypeFields;
 };
 
-export interface AuthContextState {
-  loggedIn: boolean;
-  token: string | undefined;
-  tokenDecoded: { [key: string]: any } | undefined;
-}
-
-export interface SignOutAuthAction {
-  type: "signOut";
-}
-export interface SignInAuthAction {
-  type: "signIn";
-  token: string;
-}
-
-export type AuthAction = SignOutAuthAction | SignInAuthAction;
-
-export type AuthContextDispatch = (action: AuthAction) => void;
-
-export type AuthFormAction = "signin" | "signup";
-
-export type SignUpSignInValues = {
-  email: string;
-  password: string;
-  action: AuthFormAction;
+export type FieldControlProps<T> = {
+  field: T;
+  id: string;
 };
 
-export interface ColumnBlock {
-  id: string;
-  value: string;
-  type: string;
-}
-
-export interface Column {
-  id: string;
-  width: number;
-}
-
-export interface Row {
-  id: string;
-  columns: Column[];
-}
-
-export interface Layout {
-  id: string;
-  rows: Row[];
-}
+export type PostValues = {
+  [key: string]: any;
+};

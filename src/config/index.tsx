@@ -1,126 +1,36 @@
-import _ from "lodash";
+import {
+  ContentType,
+  FieldGroupField,
+  ContentTypeFields,
+  TextField
+} from "../types";
 
-export type ContentTypeFieldType =
-  | "conditional"
-  | "date"
-  | "time"
-  | "text"
-  | "image"
-  | "layout"
-  | "id"
-  | "relationship";
-
-export interface ContentTypeFieldBase {
-  id: string;
-  name: string;
-  type:
-    | ContentTypeFieldType
-    | "fieldgroup"
-    | "repeatable"
-    | "select"
-    | "radio"
-    | "checkbox";
-}
-
-export type ConditionType = "equalto" | "notequalto";
-
-export interface ConditionalField extends ContentTypeFieldBase {
-  type: "conditional";
-  children: ContentTypeField[];
-  comparisonType: ConditionType;
-  comparisonTargetField: string;
-  comparisonTargetValue: (string | number)[];
-}
-
-export interface FieldGroupField extends ContentTypeFieldBase {
-  type: "fieldgroup";
-  children: ContentTypeField[];
-}
-
-export interface RepeatableField extends ContentTypeFieldBase {
-  type: "repeatable";
-  children: ContentTypeField[];
-}
-
-export interface SelectField extends ContentTypeFieldBase {
-  type: "select";
-  options: {
-    label: string;
-    value: string;
-  }[];
-}
-
-export interface CheckboxField extends ContentTypeFieldBase {
-  type: "checkbox";
-  options: {
-    label: string;
-    value: string;
-  }[];
-}
-
-export interface RadioField extends ContentTypeFieldBase {
-  type: "radio";
-  options: {
-    label: string;
-    value: string;
-  }[];
-}
-
-export type ContentTypeField =
-  | ContentTypeFieldBase
-  | FieldGroupField
-  | RepeatableField
-  | SelectField
-  | RadioField
-  | CheckboxField
-  | ConditionalField;
-
-export type ContentType = {
-  name: string;
-  fields: ContentTypeField[];
-};
-
-const optionsRepeatableField: RepeatableField = {
-  id: "options",
+const optionsRepeatableField: FieldGroupField = {
   name: "Options",
-  type: "repeatable",
-  children: [
-    {
-      id: "label",
+  fieldType: "fieldgroup",
+  children: {
+    label: {
       name: "Label",
-      type: "text"
+      fieldType: "text"
     },
-    {
-      id: "value",
-      name: "Value",
-      type: "text"
+    value: {
+      name: "String",
+      fieldType: "text"
     }
-  ]
+  }
 };
 
-const conditionalOptionsField: ConditionalField = {
-  type: "conditional",
-  id: "showoptions",
-  name: "showoptions",
-  comparisonType: "equalto",
-  comparisonTargetField: "type",
-  comparisonTargetValue: ["select", "radio", "checkbox", "multicheck"],
-  children: [optionsRepeatableField]
-};
-
-const contentTypeFieldsField: RepeatableField = {
-  id: "fields",
+const contentTypeFieldsField: FieldGroupField = {
   name: "Fields",
-  type: "repeatable",
-  children: [
-    {
-      id: "name",
-      type: "text",
+  fieldType: "fieldgroup",
+  repeatable: true,
+  children: {
+    name: {
+      fieldType: "text",
       name: "Name"
     },
-    {
-      type: "select",
-      id: "type",
+    type: {
+      fieldType: "select",
       name: "Select",
       options: [
         {
@@ -172,19 +82,17 @@ const contentTypeFieldsField: RepeatableField = {
           value: "checkbox"
         }
       ]
-    },
-    conditionalOptionsField
-  ]
+    }
+  }
 };
 
 export const contentTypeContentType: ContentType = {
   name: "Content Types",
-  fields: [
-    {
-      id: "name",
+  fields: {
+    name: {
       name: "Name",
-      type: "text"
-    },
-    contentTypeFieldsField
-  ]
+      fieldType: "text"
+    } as TextField,
+    fields: contentTypeFieldsField
+  }
 };
