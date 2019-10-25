@@ -8,6 +8,8 @@ import "firebase/firestore";
 import { DefaultTheme } from "styled-components";
 import { PrefabThemeProvider, defaultPrefabTheme } from "@stephenvector/prefab";
 
+import "./index.css";
+
 firebase.initializeApp({
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,

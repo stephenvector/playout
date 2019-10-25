@@ -23,7 +23,7 @@ type FieldBaseWithOptions = FieldBase & {
 };
 
 type FieldWithChildren = FieldBase & {
-  children: ContentTypeFields
+  children: ContentTypeFields;
 };
 
 export type CheckboxField = FieldBaseWithOptions & {
@@ -82,4 +82,9 @@ export type FieldControlProps<T> = {
 
 export type PostValues = {
   [key: string]: any;
+};
+
+export type Post = {
+  contentType: string;
+  values: PostValues;
 };

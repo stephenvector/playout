@@ -8,12 +8,12 @@ import {
 import { Switch, Route, NavLink } from "react-router-dom";
 import { ContentType } from "../types";
 import { contentTypeContentType } from "../config";
-import { useFirebaseCollection } from "../hooks";
+import { useContentTypes } from "../hooks";
 import PostNew from "./PostNew";
 import Collection from "./Collection";
+import PostsCollection from "./PostsCollection";
 
 const App: React.FC = () => {
-  const {} = useFirebaseCollection<ContentType>("content-types");
   return (
     <PrefabThemeProvider>
       <header>
@@ -39,16 +39,7 @@ const App: React.FC = () => {
       </header>
       <section>
         <Switch>
-          <Route
-            path="/content-types"
-            exact
-            render={() => (
-              <Collection
-                contentType={contentTypeContentType}
-                firebaseCollectionName="content-types"
-              />
-            )}
-          />
+          <Route path="/content-types" exact render={() => <Collection />} />
           <Route
             path="/content-types/new"
             exact
@@ -56,6 +47,15 @@ const App: React.FC = () => {
               <PostNew
                 contentType={contentTypeContentType}
                 firebaseCollectionName="content-types"
+              />
+            )}
+          />
+          <Route
+            path="/posts/:contentTypeId"
+            exact
+            render={renderProps => (
+              <PostsCollection
+                contentTypeId={renderProps.match.params.contentTypeId}
               />
             )}
           />

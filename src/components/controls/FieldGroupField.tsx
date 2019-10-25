@@ -12,6 +12,7 @@ export default function FieldGroupField(
   const { children } = field as FieldGroupFieldType;
   return (
     <fieldset>
+      <h3>{field.name}</h3>
       {Object.keys(children).map((childFieldId: string) => (
         <RenderField
           key={childFieldId}
