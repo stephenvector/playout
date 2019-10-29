@@ -4,14 +4,19 @@
     "esModuleInterop": true,
     "jsx": "react",
     "outDir": "lib",
-    "declaration": true,
     "rootDirs": ["src"],
     "resolveJsonModule": true,
     "inlineSourceMap": true,
     "skipLibCheck": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "target": "es5",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "isolatedModules": true,
+    "noEmit": true
   },
   "include": ["src/**/*"],
   "exclude": [
