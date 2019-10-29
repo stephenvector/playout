@@ -10,7 +10,7 @@ interface FieldWithConditions {
   repeatable?: boolean;
   comparisonType: ConditionType;
   comparisonTargetField: string;
-  comparisonTargetValue: (string | number)[];
+  comparisonTargetValue: string;
 }
 
 type FieldBase = FieldWithoutConditions | FieldWithConditions;

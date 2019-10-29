@@ -1,9 +1,23 @@
 import React from "react";
 import { useField } from "react-final-form";
-import { FieldControlProps, RadioField } from "../../types";
+import styled from "@emotion/styled";
+import { FieldControlProps, RadioField as RadioFieldType } from "../types";
 
-export default function RadioField(props: FieldControlProps<RadioField>) {
-  const formField = useField(props.id);
+const RadioStyled = styled.div``;
 
-  return <ul>{props.field.options}</ul>;
+const OptionButton = styled.button``;
+
+export default function RadioField({
+  id,
+  field
+}: FieldControlProps<RadioFieldType>) {
+  const formField = useField(id);
+
+  return (
+    <RadioStyled>
+      {field.options.map(option => {
+        <OptionButton key={option.value}>{option.label}</OptionButton>;
+      })}
+    </RadioStyled>
+  );
 }

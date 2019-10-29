@@ -1,18 +1,83 @@
 table {
   width: 100%;
-  border: 1px solid #000;
+  background: #fff;
+  border: 6px solid #fff;
+  border-radius: 3px;
+  border-collapse: collapse;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
 }
 
 th {
   border-bottom: 1px solid #000;
   padding: 1rem;
+  text-align: left;
 }
 
 td {
-  padding: 0.5rem;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+tr > td:nth-child(1) {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+tr > td:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+tbody tr:first-child td {
+  border-top: none;
+}
+
+.PostForm {
+  padding: 1rem;
+  background: #fff;
+}
+
+tr:hover td {
+  background: #56e;
+  color: #fff;
+  border-top: none;
+}
+
+tr:hover + tr td {
+  border-bottom: 1px solid transparent;
+}
+
+.App {
+  display: flex;
+  flex-direction: row;
+  max-width: 1580px;
+  margin: 0 auto;
+}
+
+.Header {
+  width: 300px;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.Header ul {
+  list-style-type: none;
+  margin: 3rem 0;
+  padding: 0;
+  line-height: 3rem;
+}
+
+.Header li a {
+  font: inherit;
+  text-decoration: none;
+  display: block;
   border-bottom: 1px solid #bbb;
 }
 
-tbody tr:last-child td {
-  border-bottom: none;
+.Content {
+  flex-grow: 1;
+}
+
+em {
+  color: #999;
 }

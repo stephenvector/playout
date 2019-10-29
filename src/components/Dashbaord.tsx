@@ -1,14 +1,10 @@
 import React from "react";
-import { Container, Row, Column, H1 } from "@stephenvector/prefab";
+import { Container } from "./primitives";
 
 export default function Dashboard() {
   return (
     <Container>
-      <Row>
-        <Column>
-          <H1>Dashboard</H1>
-        </Column>
-      </Row>
+      <h1>Dashboard</h1>
     </Container>
   );
 }

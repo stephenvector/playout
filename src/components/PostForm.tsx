@@ -1,7 +1,7 @@
 import React from "react";
 import { FormApi, SubmissionErrors } from "final-form";
 import { Form } from "react-final-form";
-import arrayMutators from "final-form-arrays";
+import { Button } from "./primitives";
 import { ContentType } from "../types";
 import RenderField from "./RenderField";
 
@@ -11,17 +11,13 @@ type PostFormProps<T> = {
   onSubmit(values: T, form: FormApi<T>): Promise<SubmissionErrors | undefined>;
 };
 
-export default function PostForm<T = {}>({
+export default function PostForm<T>({
   initialValues,
   contentType,
   onSubmit
 }: PostFormProps<T>) {
   return (
-    <Form
-      initialValues={initialValues}
-      mutators={{ ...arrayMutators }}
-      onSubmit={onSubmit}
-    >
+    <Form<T> initialValues={initialValues} onSubmit={onSubmit}>
       {({ handleSubmit, form }) => (
         <div className="PostForm">
           <form autoComplete="off" onSubmit={handleSubmit}>
@@ -34,7 +30,7 @@ export default function PostForm<T = {}>({
             ))}
 
             <p>
-              <button type="submit">Save</button>
+              <Button type="submit">Save</Button>
             </p>
           </form>
           <pre>

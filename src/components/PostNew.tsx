@@ -1,9 +1,10 @@
-import React, { useCallback } from "react";
-import { FormApi, FORM_ERROR, SubmissionErrors } from "final-form";
+import React, { useCallback, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { FormApi } from "final-form";
 import PostForm from "./PostForm";
 import { ContentType, PostValues } from "../types";
-// import { useFirebaseSetDocument } from "../hooks";
-import { Container, Row, Column, H1 } from "@stephenvector/prefab";
+import { useContentType } from "../hooks";
+import { Container } from "./primitives";
 
 interface PostNewProps {
   firebaseCollectionName: string;
@@ -11,28 +12,24 @@ interface PostNewProps {
 }
 
 export default function PostNew(props: PostNewProps) {
-  const { contentType } = props;
+  const { contentTypeId } = useParams<{ contentTypeId: string }>();
+  const { documents, isEmpty, hasError, hasLoaded } = useContentType<
+    ContentType
+  >(contentTypeId);
 
-  const handleSubmit = useCallback(
-    async (values: PostValues, form: FormApi<PostValues>) => {
-      return Promise.resolve(undefined);
-    },
-    []
-  );
+  async function handleSubmit(values: PostValues, form: FormApi<PostValues>) {
+    return undefined;
+  }
 
   return (
     <Container>
-      <Row>
-        <Column>
-          <H1>Dashboard</H1>
+      <h1>New Post</h1>
 
-          <PostForm<PostValues>
-            onSubmit={handleSubmit}
-            initialValues={{}}
-            contentType={contentType}
-          />
-        </Column>
-      </Row>
+      <PostForm<PostValues>
+        onSubmit={handleSubmit}
+        initialValues={{}}
+        contentType={documents[contentTypeId]}
+      />
     </Container>
   );
 }

@@ -2,8 +2,8 @@ import React from "react";
 import {
   FieldControlProps,
   FieldGroupField as FieldGroupFieldType
-} from "../../types";
-import RenderField from "../RenderField";
+} from "../types";
+import RenderField from "./RenderField";
 
 export default function FieldGroupField(
   props: FieldControlProps<FieldGroupFieldType>
@@ -11,8 +11,7 @@ export default function FieldGroupField(
   const { field, id } = props;
   const { children } = field as FieldGroupFieldType;
   return (
-    <fieldset>
-      <h3>{field.name}</h3>
+    <div className="FieldGroupField">
       {Object.keys(children).map((childFieldId: string) => (
         <RenderField
           key={childFieldId}
@@ -20,6 +19,6 @@ export default function FieldGroupField(
           field={children[childFieldId]}
         />
       ))}
-    </fieldset>
+    </div>
   );
 }
