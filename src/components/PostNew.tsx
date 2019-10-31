@@ -1,24 +1,38 @@
-import React, { useCallback, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { FormApi } from "final-form";
+import React from "react";
+import { FormApi, FORM_ERROR } from "final-form";
+import firebase from "firebase/app";
+import "firebase/firestore";
 import PostForm from "./PostForm";
-import { ContentType, PostValues } from "../types";
+import { PostValues } from "../types";
 import { useContentType } from "../hooks";
 import { Container } from "./primitives";
 
 interface PostNewProps {
-  firebaseCollectionName: string;
-  contentType: ContentType;
+  contentTypeId: string;
 }
 
-export default function PostNew(props: PostNewProps) {
-  const { contentTypeId } = useParams<{ contentTypeId: string }>();
-  const { documents, isEmpty, hasError, hasLoaded } = useContentType<
-    ContentType
-  >(contentTypeId);
+export default function PostNew({ contentTypeId }: PostNewProps) {
+  const { contentType } = useContentType(contentTypeId);
+
+  if (contentType === undefined) {
+    return null;
+  }
 
   async function handleSubmit(values: PostValues, form: FormApi<PostValues>) {
-    return undefined;
+    try {
+      await firebase
+        .firestore()
+        .collection("posts")
+        .doc()
+        .set({
+          ...values,
+          contentType: contentTypeId
+        });
+    } catch (e) {
+      return { [FORM_ERROR]: "something went wrong" };
+    } finally {
+      return undefined;
+    }
   }
 
   return (
@@ -28,7 +42,7 @@ export default function PostNew(props: PostNewProps) {
       <PostForm<PostValues>
         onSubmit={handleSubmit}
         initialValues={{}}
-        contentType={documents[contentTypeId]}
+        contentType={contentType}
       />
     </Container>
   );

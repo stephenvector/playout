@@ -78,6 +78,7 @@ export type ContentType = {
 export type FieldControlProps<T> = {
   field: T;
   id: string;
+  disabled: boolean;
 };
 
 export type PostValues = {
@@ -87,4 +88,28 @@ export type PostValues = {
 export type Post = {
   contentType: string;
   values: PostValues;
+};
+
+export type Posts = {
+  [key: string]: {
+    [key: string]: any;
+  };
+};
+
+export type StringKeyedObject<T> = {
+  [key: string]: T;
+};
+
+export type ReferenceOrQuery =
+  | firebase.firestore.DocumentReference
+  | firebase.firestore.Query
+  | firebase.firestore.CollectionReference;
+
+export type Labels = {
+  [k: string]: string;
+};
+
+export type Project = {
+  name: string;
+  description: string;
 };

@@ -1,10 +1,9 @@
 import React from "react";
-import { Container } from "./primitives";
 
 export default function Dashboard() {
   return (
-    <Container>
+    <div>
       <h1>Dashboard</h1>
-    </Container>
+    </div>
   );
 }

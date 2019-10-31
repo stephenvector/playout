@@ -18,26 +18,31 @@ export default function PostForm<T>({
 }: PostFormProps<T>) {
   return (
     <Form<T> initialValues={initialValues} onSubmit={onSubmit}>
-      {({ handleSubmit, form }) => (
-        <div className="PostForm">
+      {({ handleSubmit, form }) => {
+        const formState = form.getState();
+
+        return (
           <form autoComplete="off" onSubmit={handleSubmit}>
             {Object.keys(contentType.fields).map(fieldId => (
               <RenderField
                 key={fieldId}
                 field={contentType.fields[fieldId]}
                 id={fieldId}
+                disabled={formState.submitting}
               />
             ))}
 
             <p>
-              <Button type="submit">Save</Button>
+              <Button
+                disabled={formState.invalid || formState.submitting}
+                type="submit"
+              >
+                Save
+              </Button>
             </p>
           </form>
-          <pre>
-            <code>{JSON.stringify(form.getState().values, null, 2)}</code>
-          </pre>
-        </div>
-      )}
+        );
+      }}
     </Form>
   );
 }

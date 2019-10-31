@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import { useField, useForm } from "react-final-form";
 import get from "lodash/get";
 import { Button } from "./primitives";
-import { useConditionalField } from "../hooks";
 import { ContentTypeField, FieldWithConditions } from "../types";
 import { getRandomID, getDefaultFieldValue } from "../utils";
 import SelectField from "./SelectField";
@@ -13,11 +12,13 @@ import FieldGroupField from "./FieldGroupField";
 type RenderFieldProps = {
   id: string;
   field: ContentTypeField;
+  disabled: boolean;
 };
 
 function ConditionalField({
   id,
-  field
+  field,
+  disabled
 }: RenderFieldProps & {
   field: ContentTypeField & FieldWithConditions;
 }) {
@@ -47,7 +48,9 @@ function ConditionalField({
   delete fieldWithoutConditions["comparisonTargetValue"];
   delete fieldWithoutConditions["comparisonType"];
 
-  return <RenderField id={id} field={fieldWithoutConditions} />;
+  return (
+    <RenderField disabled={disabled} id={id} field={fieldWithoutConditions} />
+  );
 }
 
 type RepeatableFieldRowProps = {
@@ -66,12 +69,14 @@ function RepeatableFieldRow(props: RepeatableFieldRowProps) {
   return (
     <div>
       <div>{children}</div>
-      <Button type="button" onClick={handleRemove}></Button>
+      <button type="button" onClick={handleRemove}>
+        &times;
+      </button>
     </div>
   );
 }
 
-function RepeatableField({ field, id }: RenderFieldProps) {
+function RepeatableField({ field, id, disabled }: RenderFieldProps) {
   const formField = useField<{ [key: string]: any }>(id);
 
   const addAnotherItem = useCallback(() => {
@@ -86,8 +91,10 @@ function RepeatableField({ field, id }: RenderFieldProps) {
   const removeItem = useCallback(
     (itemId: string) => {
       const newValue = { ...formField.input.value };
+      console.log(itemId);
       delete newValue[itemId];
       formField.input.onChange(newValue);
+      console.log(newValue);
     },
     [formField.input]
   );
@@ -98,14 +105,18 @@ function RepeatableField({ field, id }: RenderFieldProps) {
         {Object.keys(formField.input.value).map(fieldKey => {
           const individualItemField = { ...field };
           individualItemField.repeatable = false;
-          const individualItemId = `${id}.[${fieldKey}]`;
+          const individualItemId = `${id}.${fieldKey}`;
           return (
             <RepeatableFieldRow
               key={individualItemId}
-              id={id}
+              id={fieldKey}
               removeItem={removeItem}
             >
-              <RenderField field={individualItemField} id={individualItemId} />
+              <RenderField
+                disabled={disabled}
+                field={individualItemField}
+                id={individualItemId}
+              />
             </RepeatableFieldRow>
           );
         })}
@@ -119,8 +130,7 @@ function RepeatableField({ field, id }: RenderFieldProps) {
   );
 }
 
-export default function RenderField({ field, id }: RenderFieldProps) {
-  const shouldRender = useConditionalField({ field, id });
+export default function RenderField({ field, id, disabled }: RenderFieldProps) {
   // Handle conditional fields
   if (
     (field as ContentTypeField & FieldWithConditions).comparisonTargetField !==
@@ -132,6 +142,7 @@ export default function RenderField({ field, id }: RenderFieldProps) {
   ) {
     return (
       <ConditionalField
+        disabled={disabled}
         field={field as ContentTypeField & FieldWithConditions}
         id={id}
       />
@@ -140,19 +151,19 @@ export default function RenderField({ field, id }: RenderFieldProps) {
 
   // Handle repeatable fields
   if (field.repeatable === true) {
-    return <RepeatableField field={field} id={id} />;
+    return <RepeatableField disabled={disabled} field={field} id={id} />;
   }
 
   // Handle the fields without special cases
   switch (field.fieldType) {
     case "select":
-      return <SelectField id={id} field={field} />;
+      return <SelectField id={id} field={field} disabled />;
     case "fieldgroup":
-      return React.createElement(FieldGroupField, { id, field });
+      return React.createElement(FieldGroupField, { id, field, disabled });
     case "text":
-      return React.createElement(TextField, { id, field });
+      return React.createElement(TextField, { id, field, disabled });
     case "textarea":
-      return React.createElement(TextareaField, { id, field });
+      return React.createElement(TextareaField, { id, field, disabled });
   }
   return null;
 }

@@ -8,7 +8,7 @@ import RenderField from "./RenderField";
 export default function FieldGroupField(
   props: FieldControlProps<FieldGroupFieldType>
 ) {
-  const { field, id } = props;
+  const { field, id, disabled } = props;
   const { children } = field as FieldGroupFieldType;
   return (
     <div className="FieldGroupField">
@@ -17,6 +17,7 @@ export default function FieldGroupField(
           key={childFieldId}
           id={`${id}.${childFieldId}`}
           field={children[childFieldId]}
+          disabled={disabled}
         />
       ))}
     </div>

@@ -1,3 +1,31 @@
+@import url("https://fonts.googleapis.com/css?family=Work+Sans&display=swap");
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Work Sans", sans-serif;
+  background: #f2f2f2;
+  color: #000;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: #56e;
+}
+
 table {
   width: 100%;
   background: #fff;
@@ -47,37 +75,66 @@ tr:hover + tr td {
   border-bottom: 1px solid transparent;
 }
 
-.App {
-  display: flex;
-  flex-direction: row;
-  max-width: 1580px;
+.FieldTypeButton {
+  background: #fff;
+  border: none;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 3px;
+  flex: 1 0 3rem;
+}
+
+.FieldTypeButton svg {
+  display: block;
   margin: 0 auto;
 }
 
+.FieldTypeSelector {
+  border-radius: 3px;
+  overflow: none;
+}
+
 .Header {
-  width: 300px;
-  padding: 2rem;
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  padding: 1rem;
 }
 
 .Header ul {
-  list-style-type: none;
-  margin: 3rem 0;
+  margin: 0;
   padding: 0;
-  line-height: 3rem;
+  list-style-type: none;
 }
 
-.Header li a {
-  font: inherit;
+.Header a {
+  color: inherit;
   text-decoration: none;
+  padding: 0 1rem;
+
+  line-height: 2rem;
+  border-radius: 1rem;
   display: block;
-  border-bottom: 1px solid #bbb;
+}
+
+.Header a.active {
+  background: #000;
+  color: #fff;
 }
 
 .Content {
-  flex-grow: 1;
+  margin-left: 250px;
+  padding: 1rem;
 }
 
-em {
-  color: #999;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 1rem 0;
+  line-height: 1.1;
 }

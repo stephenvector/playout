@@ -40,30 +40,24 @@ export default function Auth() {
   }
 
   return (
-    <div className="animated bounceInDown ">
-      <AuthStyled>
-        <Form initialValues={initialValues} onSubmit={handleSubmit}>
-          {({ handleSubmit }) => (
-            <form noValidate onSubmit={handleSubmit}>
-              <LargeText>Login</LargeText>
-              <InputField
-                placeholder="Email Address"
-                type="email"
-                name="email"
-              />
-              <InputField
-                placeholder="Password"
-                type="password"
-                name="password"
-              />
-              <Button>Sign Up</Button>
-            </form>
-          )}
-        </Form>
-        <footer>
-          <p>Need An Account? SignUp -> </p>
-        </footer>
-      </AuthStyled>
-    </div>
+    <AuthStyled>
+      <Form initialValues={initialValues} onSubmit={handleSubmit}>
+        {({ handleSubmit }) => (
+          <form noValidate onSubmit={handleSubmit}>
+            <LargeText>Login</LargeText>
+            <InputField placeholder="Email Address" type="email" name="email" />
+            <InputField
+              placeholder="Password"
+              type="password"
+              name="password"
+            />
+            <Button>Sign Up</Button>
+          </form>
+        )}
+      </Form>
+      <footer>
+        <p>Need An Account? SignUp -> </p>
+      </footer>
+    </AuthStyled>
   );
 }

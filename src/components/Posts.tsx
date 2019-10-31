@@ -1,34 +1,42 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { useContentTypePosts } from "../hooks";
+import { Link } from "react-router-dom";
+import { useContentType, useContentTypePosts } from "../hooks";
 import { Container } from "./primitives";
 import { PostValues } from "../types";
+import { getLabelsFromContentType } from "../utils";
 
-export default function Posts() {
-  const { contentTypeId } = useParams<{ contentTypeId: string }>();
-  const { documents } = useContentTypePosts<PostValues>(contentTypeId);
+type PostProps = {
+  contentTypeId: string;
+};
+
+export default function Posts({ contentTypeId }: PostProps) {
+  const { contentType, loaded } = useContentType(contentTypeId);
+  const posts = useContentTypePosts<PostValues>(contentTypeId);
+
+  if (contentType === undefined || !loaded) {
+    return <span>loading</span>;
+  }
 
   return (
     <Container>
-      <h1>Posts</h1>
+      <h1>{contentType.name}</h1>
 
       <table>
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Fields</th>
-          </tr>
+          <tr>{/* content type field labels will go here */}</tr>
         </thead>
         <tbody>
-          {Object.keys(documents).map(docId => {
+          {Object.keys(posts.documents).map(docId => {
             return (
               <tr key={docId}>
                 <td>
-                  {documents[docId].name ? (
-                    documents[docId].name
-                  ) : (
-                    <em>{docId}</em>
-                  )}
+                  <Link to={`/posts/${contentTypeId}/${docId}`}>
+                    {posts.documents[docId].name ? (
+                      posts.documents[docId].name
+                    ) : (
+                      <em>{docId}</em>
+                    )}
+                  </Link>
                 </td>
                 <td>{docId}</td>
               </tr>

@@ -7,11 +7,11 @@ export default function RelationshipField(
   props: FieldControlProps<RelationshipField>
 ) {
   const formField = useField(props.id);
-  const { documents } = useContentType(props.field.relationshipWith);
+  const { contentType } = useContentType(props.field.relationshipWith);
 
   return (
     <pre>
-      <code>{JSON.stringify(documents, null, 2)}</code>
+      <code>{JSON.stringify(contentType, null, 2)}</code>
     </pre>
   );
 }

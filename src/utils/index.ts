@@ -1,15 +1,9 @@
 import {
   ContentTypeFields,
   ContentType,
-  DateField,
-  TimeField,
-  TextField,
-  RelationshipField,
   FieldGroupField,
-  CheckboxField,
-  RadioField,
   ContentTypeField,
-  SelectField
+  Labels
 } from "../types";
 
 export function getRandomID(
@@ -83,4 +77,12 @@ export function getDefaultFieldValue(field: ContentTypeField) {
     default:
       return "";
   }
+}
+
+export function getLabelsFromContentType(contentType: ContentType): Labels {
+  const labels: Labels = {};
+  Object.keys(contentType.fields).forEach(fieldId => {
+    labels[fieldId] = contentType.fields[fieldId].name;
+  });
+  return labels;
 }
