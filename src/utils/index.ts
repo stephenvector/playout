@@ -60,6 +60,8 @@ export function getValueShapeFromContentTypeFields(fields: ContentTypeFields) {
       default:
         break;
     }
+
+    valueShape[fieldId] = defaultValue;
   });
 
   return valueShape;

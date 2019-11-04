@@ -15,53 +15,66 @@ import Media from "./Media";
 import { useAuth } from "../hooks";
 
 const App: React.FC = () => {
-  const t = useAuth();
+  const auth = useAuth();
+
   return (
     <AuthContextProvider>
       <div>
         <Header />
         <section className="Content">
-          <Switch>
-            <Route path="/" exact component={Dashboard} />
-            <Route path="/signin" exact component={SignIn} />
-            <Route path="/signup" exact component={SignUp} />
-            <Route path="/media" exact component={Media} />
-            <Route path="/content-types" exact component={ContentTypes} />
-            <Route path="/content-types/new" exact component={ContentTypeNew} />
-            <Route
-              path="/content-types/:contentTypeId"
-              exact
-              render={props => (
-                <ContentTypeEdit
-                  contentTypeId={props.match.params.contentTypeId}
-                />
-              )}
-            />
-            <Route
-              path="/posts/:contentTypeId"
-              exact
-              render={props => (
-                <Posts contentTypeId={props.match.params.contentTypeId} />
-              )}
-            />
-            <Route
-              path="/posts/:contentTypeId/new"
-              exact
-              render={props => (
-                <PostNew contentTypeId={props.match.params.contentTypeId} />
-              )}
-            />
-            <Route
-              path="/posts/:contentTypeId/:postId"
-              exact
-              render={props => (
-                <PostEdit
-                  postId={props.match.params.postId}
-                  contentTypeId={props.match.params.contentTypeId}
-                />
-              )}
-            />
-          </Switch>
+          {auth.checkedAuth && !auth.isSignedIn && (
+            <Switch>
+              <Route path="/" exact render={() => <div>Home</div>} />
+              <Route path="/signin" exact component={SignIn} />
+              <Route path="/signup" exact component={SignUp} />
+            </Switch>
+          )}
+          {auth.checkedAuth && auth.isSignedIn && (
+            <Switch>
+              <Route path="/" exact component={Dashboard} />
+
+              <Route path="/media" exact component={Media} />
+              <Route path="/content-types" exact component={ContentTypes} />
+              <Route
+                path="/content-types/new"
+                exact
+                component={ContentTypeNew}
+              />
+              <Route
+                path="/content-types/:contentTypeId"
+                exact
+                render={props => (
+                  <ContentTypeEdit
+                    contentTypeId={props.match.params.contentTypeId}
+                  />
+                )}
+              />
+              <Route
+                path="/posts/:contentTypeId"
+                exact
+                render={props => (
+                  <Posts contentTypeId={props.match.params.contentTypeId} />
+                )}
+              />
+              <Route
+                path="/posts/:contentTypeId/new"
+                exact
+                render={props => (
+                  <PostNew contentTypeId={props.match.params.contentTypeId} />
+                )}
+              />
+              <Route
+                path="/posts/:contentTypeId/:postId"
+                exact
+                render={props => (
+                  <PostEdit
+                    postId={props.match.params.postId}
+                    contentTypeId={props.match.params.contentTypeId}
+                  />
+                )}
+              />
+            </Switch>
+          )}
         </section>
       </div>
     </AuthContextProvider>

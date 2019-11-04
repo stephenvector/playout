@@ -20,7 +20,6 @@ export default function Media() {
       .ref("/")
       .listAll()
       .then(async result => {
-        console.log(result);
         const mediaItemsPromises: Promise<MediaItem>[] = [];
         for (let item of result.items) {
           try {
@@ -60,6 +59,7 @@ export default function Media() {
       {loaded &&
         mediaItems.map(mediaItem => (
           <img
+            alt=""
             key={mediaItem.url}
             style={{
               maxHeight: "100px",

@@ -5,10 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
-    "build": "webpack",
-    "test": "jest",
-    "lint": "eslint src/**/*.tsx",
-    "rollup": "rollup -c rollup.config.js"
+    "build": "react-scripts build",
+    "test": "react-scripts test"
   },
   "husky": {
     "hooks": {
@@ -37,6 +35,8 @@
     "@fortawesome/react-fontawesome": "^0.1.7",
     "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
+    "@stephenvector/picto": "^0.1.19",
+    "@stephenvector/prefab": "^0.3.1",
     "animate.css": "^3.7.2",
     "final-form": "^4.18.5",
     "firebase": "^7.2.1",

@@ -1,24 +1,19 @@
-import {
-  ContentType,
-  FieldGroupField,
-  ContentTypeFields,
-  TextField
-} from "../types";
+import { ContentType, FieldGroupField, TextField } from "../types";
 
-const optionsRepeatableField: FieldGroupField = {
-  name: "Options",
-  fieldType: "fieldgroup",
-  children: {
-    label: {
-      name: "Label",
-      fieldType: "text"
-    },
-    value: {
-      name: "String",
-      fieldType: "text"
-    }
-  }
-};
+// const optionsRepeatableField: FieldGroupField = {
+//   name: "Options",
+//   fieldType: "fieldgroup",
+//   children: {
+//     label: {
+//       name: "Label",
+//       fieldType: "text"
+//     },
+//     value: {
+//       name: "String",
+//       fieldType: "text"
+//     }
+//   }
+// };
 
 const contentTypeFieldsField: FieldGroupField = {
   name: "Fields",

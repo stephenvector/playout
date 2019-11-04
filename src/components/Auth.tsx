@@ -39,6 +39,10 @@ export default function Auth() {
     firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
+  if (isSignedIn) {
+    return <div>Signed In</div>;
+  }
+
   return (
     <AuthStyled>
       <Form initialValues={initialValues} onSubmit={handleSubmit}>

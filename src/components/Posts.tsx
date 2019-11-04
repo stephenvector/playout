@@ -17,13 +17,19 @@ export default function Posts({ contentTypeId }: PostProps) {
     return <span>loading</span>;
   }
 
+  const labels = getLabelsFromContentType(contentType);
+
   return (
     <Container>
       <h1>{contentType.name}</h1>
 
       <table>
         <thead>
-          <tr>{/* content type field labels will go here */}</tr>
+          <tr>
+            {Object.keys(labels).map(labelId => (
+              <th key={labelId}>{labels[labelId]}</th>
+            ))}
+          </tr>
         </thead>
         <tbody>
           {Object.keys(posts.documents).map(docId => {

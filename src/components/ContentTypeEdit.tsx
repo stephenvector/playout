@@ -5,7 +5,6 @@ import { FORM_ERROR } from "final-form";
 import { Container } from "./primitives";
 import { contentTypeContentType } from "../config";
 import { useContentType } from "../hooks";
-import ErrorMessage from "./ErrorMessage";
 import PostForm from "./PostForm";
 import Loading from "./Loading";
 import { ContentType } from "../types";
@@ -34,14 +33,6 @@ export default function ContentTypeEdit({
   if (!loaded || contentType === undefined) {
     return <Loading />;
   }
-
-  // if (hasError) {
-  //   return <ErrorMessage>{`Something went wrong :(`}</ErrorMessage>;
-  // }
-
-  // if (isEmpty) {
-  //   return <ErrorMessage>{`Content Type Not Found`}</ErrorMessage>;
-  // }
 
   return (
     <Container>
