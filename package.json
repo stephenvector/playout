@@ -7,14 +7,6 @@
     "build": "react-scripts build",
     "test": "jest"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": "npm run lint"
-  },
   "sideEffects": false,
   "repository": {
     "type": "git",
