@@ -1,7 +1,7 @@
 import React from "react";
 import { useField } from "react-final-form";
 import { Select } from "@stephenvector/prefab";
-import { FieldControlProps, SelectField as SelectFieldType } from "../../types";
+import { FieldControlProps, SelectField as SelectFieldType } from "../types";
 
 type SelectFieldProps = FieldControlProps<SelectFieldType>;
 

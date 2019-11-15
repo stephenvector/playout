@@ -1,7 +1,6 @@
 import React from "react";
 import { FormApi, SubmissionErrors } from "final-form";
 import { Form } from "react-final-form";
-import arrayMutators from "final-form-arrays";
 import { ContentType } from "../types";
 import RenderField from "./RenderField";
 
@@ -17,11 +16,7 @@ export default function PostForm<T = {}>({
   onSubmit
 }: PostFormProps<T>) {
   return (
-    <Form
-      initialValues={initialValues}
-      mutators={{ ...arrayMutators }}
-      onSubmit={onSubmit}
-    >
+    <Form initialValues={initialValues} onSubmit={onSubmit}>
       {({ handleSubmit, form }) => (
         <div className="PostForm">
           <form autoComplete="off" onSubmit={handleSubmit}>

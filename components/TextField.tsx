@@ -1,7 +1,7 @@
 import React from "react";
 import { useField } from "react-final-form";
 import { Input, Box } from "@stephenvector/prefab";
-import { TextField as TextFieldType, FieldControlProps } from "../../types";
+import { TextField as TextFieldType, FieldControlProps } from "../types";
 
 export default function TextField({
   id,

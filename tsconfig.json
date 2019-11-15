@@ -2,13 +2,19 @@
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
-    "jsx": "react",
+    "jsx": "preserve",
     "outDir": "lib",
-    "rootDirs": ["src"],
+    "rootDirs": [
+      "src"
+    ],
     "resolveJsonModule": true,
     "inlineSourceMap": true,
     "skipLibCheck": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "target": "es5",
@@ -18,7 +24,9 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "src/**/*.test.tsx",
     "*/__tests__/**/*",
