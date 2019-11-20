@@ -10,7 +10,7 @@ type PostFormProps<T> = {
   onSubmit(values: T, form: FormApi<T>): Promise<SubmissionErrors | undefined>;
 };
 
-export default function PostForm<T = {}>({
+export default function PostForm<T>({
   initialValues,
   contentType,
   onSubmit
@@ -25,18 +25,21 @@ export default function PostForm<T = {}>({
                 key={fieldId}
                 field={contentType.fields[fieldId]}
                 id={fieldId}
+                disabled={formState.submitting}
               />
             ))}
 
             <p>
-              <button type="submit">Save</button>
+              <Button
+                disabled={formState.invalid || formState.submitting}
+                type="submit"
+              >
+                Save
+              </Button>
             </p>
           </form>
-          <pre>
-            <code>{JSON.stringify(form.getState().values, null, 2)}</code>
-          </pre>
-        </div>
-      )}
+        );
+      }}
     </Form>
   );
 }

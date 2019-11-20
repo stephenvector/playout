@@ -20,6 +20,7 @@ export const Button = styled.button`
   border: none;
   font-weight: bold;
   font-size: 1rem;
+  cursor: pointer;
 `;
 
 export const Input = styled.input`
@@ -31,8 +32,10 @@ export const Input = styled.input`
   border-radius: 3px;
   display: block;
   width: 100%;
-  box-shadow: inset 0 0 0 3px #ddd;
   padding: 0 0.75rem;
+  &:focus {
+    box-shadow: 0 0 0 2px #48dd8f;
+  }
 `;
 
 export const FormControlWrapper = styled.div`

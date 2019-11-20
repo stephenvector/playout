@@ -4,19 +4,18 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import PostForm from "./PostForm";
 import { PostValues } from "../types";
-import { useContentType } from "../hooks";
+import { useContentType, usePost } from "../hooks";
 import { Container } from "./primitives";
+import Loading from "./Loading";
 
-interface PostNewProps {
+interface PostEditProps {
+  postId: string;
   contentTypeId: string;
 }
 
-export default function PostNew({ contentTypeId }: PostNewProps) {
-  const { contentType } = useContentType(contentTypeId);
-
-  if (contentType === undefined) {
-    return null;
-  }
+export default function PostEdit({ contentTypeId, postId }: PostEditProps) {
+  const { loaded, contentType } = useContentType(contentTypeId);
+  const post = usePost(postId);
 
   async function handleSubmit(values: PostValues, form: FormApi<PostValues>) {
     try {
@@ -35,13 +34,25 @@ export default function PostNew({ contentTypeId }: PostNewProps) {
     }
   }
 
+  if (!loaded || contentType === undefined || !post.hasLoaded) {
+    return <Loading />;
+  }
+
+  // if (!contentType.hasError) {
+  //   return <Loading />;
+  // }
+
+  if (!post.hasError) {
+    return <Loading />;
+  }
+
   return (
     <Container>
-      <h1>New Post</h1>
+      <h1>Edit Post</h1>
 
       <PostForm<PostValues>
         onSubmit={handleSubmit}
-        initialValues={{}}
+        initialValues={post.documents[postId] as PostValues}
         contentType={contentType}
       />
     </Container>
