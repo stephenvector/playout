@@ -1,188 +1,235 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { ContentType } from "../types";
+import "firebase/auth";
+import { useField } from "react-final-form";
+import { contentTypeSchema } from "../schema";
+import { AuthContext } from "../contexts";
+import {
+  FieldControlProps,
+  FieldWithConditions,
+  ContentTypeField,
+  StringKeyedObject,
+  ReferenceOrQuery,
+  PostValues,
+  ContentType,
+  Project
+} from "../types";
 
-type Posts = {
-  [key: string]: {
-    [key: string]: any;
-  };
-};
-
-export function usePosts(contentTypeId: string) {
-  const [posts, setPosts] = useState<Posts>({});
+function useFirestore<T>(referenceOrQuery: ReferenceOrQuery) {
+  const [documents, setDocuments] = useState<StringKeyedObject<T>>({});
+  const [hasError, setHasError] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(() => {
     let ignore = false;
 
-    async function getPosts() {
-      const firebasePosts: Posts = {};
-      try {
-        const response = await firebase
-          .firestore()
-          .collection(`/posts/${posts}`)
-          .get();
+    setHasError(false);
+    setHasLoaded(false);
+    setDocuments({});
+    setIsEmpty(false);
 
-        response.forEach(doc => {
-          firebasePosts[doc.id] = doc.data();
-        });
+    async function getDocuments() {
+      try {
+        const response = await referenceOrQuery.get();
+
+        if (response instanceof firebase.firestore.DocumentSnapshot) {
+          if (!response.exists && !ignore) {
+            setIsEmpty(true);
+          } else if (!ignore) {
+            setDocuments({ [response.id]: response.data() as T });
+          }
+        } else {
+          const docs: StringKeyedObject<T> = {};
+
+          response.forEach(doc => {
+            const docData = doc.data() as T;
+            docs[doc.id] = docData;
+          });
+
+          if (!ignore) setDocuments(docs);
+        }
       } catch (e) {
+        if (!ignore) setHasError(true);
       } finally {
-        if (!ignore) setPosts(firebasePosts);
+        if (!ignore) setHasLoaded(true);
       }
     }
 
-    getPosts();
+    getDocuments();
 
-    return () => {
+    return function cleanup() {
       ignore = true;
     };
+  }, [referenceOrQuery]);
+
+  return {
+    documents,
+    hasError,
+    hasLoaded,
+    isEmpty
+  };
+}
+
+export function useContentTypePosts<T>(contentTypeId: string) {
+  const [reference, setReference] = useState(
+    firebase
+      .firestore()
+      .collection("posts")
+      .where("contentType", "==", contentTypeId)
+  );
+
+  useEffect(() => {
+    setReference(
+      firebase
+        .firestore()
+        .collection("posts")
+        .where("contentType", "==", contentTypeId)
+    );
   }, [contentTypeId]);
+
+  return useFirestore<T>(reference);
+}
+
+export function usePost(postId: string) {
+  const [postRef, setPostRef] = useState(
+    firebase
+      .firestore()
+      .collection("posts")
+      .doc(postId)
+  );
+
+  useEffect(() => {
+    setPostRef(
+      firebase
+        .firestore()
+        .collection("posts")
+        .doc(postId)
+    );
+  }, [postId]);
+
+  return useFirestore<PostValues>(postRef);
 }
 
 export function useContentTypes() {
-  const [contentTypes, setContentTypes] = useState<ContentType>({});
+  const [loaded, setLoaded] = useState(false);
+  const [contentTypes, setContentTypes] = useState<
+    StringKeyedObject<ContentType>
+  >({});
 
   useEffect(() => {
-    let ignore = false;
-
-    async function getContentTypes() {
-      const firebaseContentTypes: { [key: string]: ContentType } = {};
-      try {
-        const response = await firebase
-          .firestore()
-          .collection(`/content-types`)
-          .get();
-
-        response.forEach(doc => {
-          firebaseContentTypes[doc.id] = doc.data() as ContentType;
+    const unsubscribe = firebase
+      .firestore()
+      .collection("content-types")
+      .onSnapshot(snapshot => {
+        const newContentTypes: StringKeyedObject<ContentType> = {};
+        snapshot.forEach(doc => {
+          newContentTypes[doc.id] = doc.data() as ContentType;
         });
-      } catch (e) {
-      } finally {
-        if (!ignore) setContentTypes(firebaseContentTypes);
-      }
-    }
 
-    getContentTypes();
-
+        setContentTypes(newContentTypes);
+        setLoaded(true);
+      });
     return () => {
-      ignore = true;
+      setLoaded(false);
+      unsubscribe();
     };
   }, []);
 
-  return contentTypes;
+  return { loaded, contentTypes };
 }
 
-// type UseFirebaseCollectionConfig = {
-//   collectionName: string;
-//   fieldPath?: string | firebase.firestore.FieldPath;
-//   opStr?: firebase.firestore.WhereFilterOp;
-//   value?: any;
-// };
+export function useContentType(contentTypeId: string) {
+  const [loaded, setLoaded] = useState(false);
+  const [notFound, setNotFound] = useState(false);
+  const [contentType, setContentType] = useState<ContentType>();
 
-// export function useFirebaseDocument(documentId: string) {
-//   const [hasLoaded, setHasLoaded] = useState(false);
-//   const [] = useState(false);
-//   const [contentType, setContentType] = useState<ContentType | undefined>();
-//   const [hasError, setHasError] = useState(false);
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("content-types")
+      .doc(contentTypeId)
+      .onSnapshot(doc => {
+        if (!doc.exists) {
+          setNotFound(true);
+        } else {
+          setContentType(contentTypeSchema.cast(doc.data()));
+          setNotFound(false);
+        }
+        setLoaded(true);
+      });
+    return () => {
+      setLoaded(false);
+      unsubscribe();
+    };
+  }, [contentTypeId]);
 
-//   // firebase
-//   //   .firestore()
-//   //   .collection("content-types")
-//   //   .doc(name)
-//   //   .get();
-// }
+  return { loaded, contentType, notFound };
+}
 
-// export function useContentTypePosts(contentTypeId: string) {
-//   return useFirebaseCollection({
-//     collectionName: "posts",
-//     fieldPath: "contentType",
-//     opStr: "==",
-//     value: contentTypeId
-//   });
-// }
+export function useConditionalField({
+  id,
+  field
+}: FieldControlProps<ContentTypeField>) {
+  const {
+    comparisonTargetField,
+    comparisonTargetValue,
+    comparisonType
+  } = field as ContentTypeField & FieldWithConditions;
 
-// export function useFirebaseCollection(props: UseFirebaseCollectionConfig) {
-//   const { collectionName, fieldPath, opStr, value } = props;
-//   const [loaded, setLoaded] = useState(false);
-//   const [hasError, setHasError] = useState(false);
-//   const [collectionItems, setCollectionItems] = useState<{
-//     [key: string]: any;
-//   }>({});
+  const {
+    input: { value: targetValue }
+  } = useField(comparisonTargetField);
 
-//   useEffect(() => {
-//     let cancelled = false;
+  if (
+    comparisonTargetValue === undefined ||
+    comparisonTargetField === undefined ||
+    comparisonType === undefined
+  ) {
+    return true;
+  }
 
-//     async function fetchCollection() {
-//       try {
-//         let querySnapshotPromise = firebase
-//           .firestore()
-//           .collection(collectionName);
+  if (comparisonType === "equalto" && targetValue !== comparisonTargetValue) {
+    return false;
+  }
 
-//         if (
-//           fieldPath !== undefined &&
-//           opStr !== undefined &&
-//           value !== undefined
-//         ) {
-//           querySnapshotPromise.where(fieldPath, opStr, value);
-//         }
+  if (
+    comparisonType === "notequalto" &&
+    targetValue === comparisonTargetValue
+  ) {
+    return false;
+  }
 
-//         const t = querySnapshotPromise.get();
+  return true;
+}
 
-//         const result = await t;
-//         const newCOllectionItems: { [key: string]: any } = {};
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
-//         result.forEach(item => {
-//           const tempItem: any = {
-//             ...item.data()
-//           };
-//           newCOllectionItems[item.id] = tempItem;
-//         });
-//         if (!cancelled) {
-//           setCollectionItems(newCOllectionItems);
-//           setLoaded(true);
-//         }
-//       } catch (e) {
-//         if (!cancelled) {
-//           setHasError(true);
-//           setLoaded(true);
-//         }
-//       }
-//     }
+export function useProjects() {
+  const [loaded, setLoaded] = useState(false);
+  const [projects, setProjects] = useState<StringKeyedObject<Project>>();
 
-//     fetchCollection();
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("projects")
+      .onSnapshot(snapshot => {
+        const newProjects: StringKeyedObject<Project> = {};
+        snapshot.forEach(doc => {
+          newProjects[doc.id] = doc.data() as Project;
+        });
 
-//     return function cleanup() {
-//       cancelled = true;
-//     };
-//   }, []);
+        setProjects(newProjects);
+        setLoaded(true);
+      });
+    return () => {
+      setLoaded(false);
+      unsubscribe();
+    };
+  }, []);
 
-//   return {
-//     loaded,
-//     hasError,
-//     collectionItems
-//   };
-// }
-
-// export function useFirebaseSetDocument(collectionName: string) {
-//   const setPost = useCallback(
-//     async function setPost(
-//       values: { [key: string]: any },
-//       id: string = firebase
-//         .firestore()
-//         .collection(collectionName)
-//         .doc().id
-//     ) {
-//       await firebase
-//         .firestore()
-//         .collection(collectionName)
-//         .doc(id)
-//         .set(values);
-//     },
-//     [collectionName]
-//   );
-
-//   return {
-//     setPost
-//   };
-// }
+  return { loaded, projects };
+}

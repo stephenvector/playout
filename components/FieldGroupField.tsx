@@ -2,8 +2,8 @@ import React from "react";
 import {
   FieldControlProps,
   FieldGroupField as FieldGroupFieldType
-} from "../../types";
-import RenderField from "../RenderField";
+} from "../types";
+import RenderField from "./RenderField";
 
 export default function FieldGroupField(
   props: FieldControlProps<FieldGroupFieldType>

@@ -70,3 +70,17 @@ export function getValueShapeFromContentTypeFields(fields: ContentTypeFields) {
 
   return valueShape;
 }
+
+export function getDefaultFieldValue(field: ContentTypeField) {
+  switch (field.fieldType) {
+    case "fieldgroup":
+      return {};
+    case "select":
+    case "radio":
+    case "date":
+    case "time":
+    case "text":
+    default:
+      return "";
+  }
+}

@@ -5,9 +5,19 @@ import {
   TextField
 } from "../types";
 
+export const CHECKBOX_FIELD = "checkbox";
+export const DATE_FIELD = "date";
+export const FIELD_GROUP_FIELD = "fieldgroup";
+export const RADIO_FIELD = "radio";
+export const RELATIONSHIP_FIELD = "relationship";
+export const SELECT_FIELD = "select";
+export const TIME_FIELD = "time";
+export const TEXT_FIELD = "text";
+export const TEXTAREA_FIELD = "textarea";
+
 const optionsRepeatableField: FieldGroupField = {
   name: "Options",
-  fieldType: "fieldgroup",
+  fieldType: FIELD_GROUP_FIELD,
   children: {
     label: {
       name: "Label",

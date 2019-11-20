@@ -14,6 +14,7 @@ import "firebase/firestore";
 
 class PlayoutApp extends App {
   componentDidMount() {
+    console.log(process.env);
     firebase.initializeApp({
       apiKey: process.env.FIREBASE_API_KEY,
       authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -25,6 +26,7 @@ class PlayoutApp extends App {
     });
   }
   render() {
+    const { Component, pageProps } = this.props;
     return (
       <PrefabThemeProvider includeGlobals theme={defaultPrefabTheme}>
         <header>
@@ -48,7 +50,15 @@ class PlayoutApp extends App {
             </Row>
           </Container>
         </header>
-        <section></section>
+        <section>
+          <Container>
+            <Row>
+              <Column>
+                <Component {...pageProps} />
+              </Column>
+            </Row>
+          </Container>
+        </section>
       </PrefabThemeProvider>
     );
   }
