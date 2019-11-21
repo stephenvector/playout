@@ -1,10 +1,6 @@
 import React from "react";
 import { useField } from "react-final-form";
-<<<<<<< HEAD:components/TextField.tsx
-import { Input, Box } from "@stephenvector/prefab";
-=======
-import { Input } from "./primitives";
->>>>>>> master:src/components/TextField.tsx
+import { Input, Label } from "@stephenvector/prefab";
 import { TextField as TextFieldType, FieldControlProps } from "../types";
 
 export default function TextField({
@@ -15,7 +11,7 @@ export default function TextField({
 
   return (
     <>
-      <label>{field.name}</label>
+      <Label>{field.name}</Label>
       <Input
         type="text"
         onChange={formField.input.onChange}

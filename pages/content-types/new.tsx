@@ -28,7 +28,7 @@ export default function ContentTypeNew() {
   return (
     <>
       <H1>Create A New Content Type</H1>
-      <PostForm
+      <PostForm<ContentType>
         onSubmit={createContentType}
         initialValues={INITIAL_STATE}
         contentType={contentTypeContentType}

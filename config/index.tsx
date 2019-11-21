@@ -1,6 +1,5 @@
 import { ContentType, FieldGroupField, TextField } from "../types";
 
-<<<<<<< HEAD:config/index.tsx
 export const CHECKBOX_FIELD = "checkbox";
 export const DATE_FIELD = "date";
 export const FIELD_GROUP_FIELD = "fieldgroup";
@@ -25,22 +24,6 @@ const optionsRepeatableField: FieldGroupField = {
     }
   }
 };
-=======
-// const optionsRepeatableField: FieldGroupField = {
-//   name: "Options",
-//   fieldType: "fieldgroup",
-//   children: {
-//     label: {
-//       name: "Label",
-//       fieldType: "text"
-//     },
-//     value: {
-//       name: "String",
-//       fieldType: "text"
-//     }
-//   }
-// };
->>>>>>> master:src/config/index.tsx
 
 const contentTypeFieldsField: FieldGroupField = {
   name: "Fields",
