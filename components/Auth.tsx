@@ -7,21 +7,6 @@ import { useAuth } from "../hooks";
 import { Button, LargeText } from "./primitives";
 import InputField from "./InputField";
 
-const AuthStyled = styled.div`
-  form {
-    padding: 3rem;
-  }
-  footer {
-    padding: 3rem;
-    border-top: 1px solid #ddd;
-  }
-  background: #fff;
-  max-width: 500px;
-  margin: 3rem auto;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.1);
-`;
-
 type SignUpSignInValues = {
   email: string;
   password: string;
@@ -44,7 +29,7 @@ export default function Auth() {
   }
 
   return (
-    <AuthStyled>
+    <>
       <Form initialValues={initialValues} onSubmit={handleSubmit}>
         {({ handleSubmit }) => (
           <form noValidate onSubmit={handleSubmit}>
@@ -62,6 +47,6 @@ export default function Auth() {
       <footer>
         <p>Need An Account? SignUp -> </p>
       </footer>
-    </AuthStyled>
+    </>
   );
 }
